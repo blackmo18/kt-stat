@@ -1,4 +1,4 @@
-**Data Science Project in Kotlin**
+# Data Science Project in Kotlin
 * Mutli Linear Regression
 * Simple  Linear Regression
 
@@ -12,21 +12,34 @@
 * Idiomatic Categorization
 * Annotation Categorization
 
-Usage:
+**Usage:**
+**a.** Idiomatic Appraoch
+1.  *create data class*
+2. *parse csv file with data class*
+3. *categorized using extension function*
+4. *create category keys*
+5. *create array of **doublearray(matrix equation)** for independent variables*
+6. *create array of double for independent variables*
+7. *feed arrays to **OLSML***
 
-*extend data class with **ScientificData class***
+**b.** Class Annotation
+1. *create a data class*
+2. *extend data class with **ScientificData class***
+3. *mark class property with **annotation***
+4. *parse csv file with data class*
+5. *categorize and create keys by instantiating and initializing **CategoryKey***
+6. *retrieve category keys, and dependent, indepedent array of:  **doubles, array of doubles***
+7. *feed arrays to **OLSML***
 
-*mark class property with annotation*
+**c.** Annoations
+1. @Category 
+    - identifies that the property is a category variable
 
-@Category 
-- identifies that the property is a category variable
+2. @Dependent 
+    - mark the property as dependent variable
+    - make sure that there is only one dependent variable annotated
 
-@Dependent 
-- mark the property as dependent variable
-
-- make sure that there is only one dependent variable annotated
-
-creating data ScientificData class
+Creating ScientificData class
 ```kotlin
 data class Company(
     @CsvBindByName
@@ -59,7 +72,7 @@ using idiomatic approach
     //-- Multi linear regression without ScientificData class and annotation
     val category1 = CategoryKeys(data)
         .addCategory(key ="state", cat = {it.state!!} )
-
+    // categorizing data sets
     val categorizedData = data.categorized(
         category = {
             categorizeByVariable { map ->
@@ -82,9 +95,10 @@ using idiomatic approach
 ```
 using class annotation
 ```kotlin
+    //-- categorizing data sets
     val category2 = CategoryKeys(data).initCategoryData()
 
-    //-- creating array of doubles and dependent variable
+    //-- creating array of array of doubles
     val doubleEQ2 = DoubleEQ(category2.getCategoryKeys())
 
     //-- resulting array, array of doubles are arranged alphabetically according to data class property name
@@ -100,8 +114,3 @@ removing columns from double array eg. backward elimination approach
     val removedCol = matProcessed.removeColumns(1,0,3)
     val arrayVal = removedCol.to2DArray()
 ```
-
-
-
-
-
