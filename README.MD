@@ -14,7 +14,7 @@
 
 Usage:
 
-*extend data class with **DataScience class***
+*extend data class with **ScientificData class***
 
 *mark class property with annotation*
 
@@ -26,7 +26,7 @@ Usage:
 
 - make sure that there is only one dependent variable annotated
 
-creating data science class
+creating data ScientificData class
 ```kotlin
 data class Company(
     @CsvBindByName
@@ -49,7 +49,7 @@ data class Company(
 ): ScientificData()
 ```
 
-Parsing data to data science class from resource Folder
+Parsing data to ScientificData class from resource Folder
 ```kotlin
 val data = dataClassFromCSV("/Company.csv", Company::class.java)
 ```
@@ -90,10 +90,6 @@ using class annotation
     //-- resulting array, array of doubles are arranged alphabetically according to data class property name
     val xW = doubleEQ2.createEQ(category2.getCategorizedData())
     val yW = category2.getDependentValues()
-
-    //-- removing columns for p values not in accepted values
-    val matProcessed = create(xD)
-    val removedCol = matProcessed.removeColumns(1,0,3)
 
     val olsml = OLSML(yW, xW)
     val summary = olsml.summary()
