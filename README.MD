@@ -3,7 +3,8 @@
 * Simple  Linear Regression
 
 **Libraries Used**
-* [OpenCSV](http://opencsv.sourceforge.net/) - library for parsing csv file to classes
+* [Kotlin-grass](https://github.com/blackmo18/kotlin-grass) - kotlin library for parsing csv file to data class
+* [Kotlin-csv](https://github.com/doyaaaaaken/kotlin-csv) - kotlin library for reading csv file
 * [Koma](https://github.com/kyonifer/koma) - library for scientific computing
 * [Apache Commons Math](http://commons.apache.org/proper/commons-math/) - OLM Multi Linear Regression
 * [Kotlin-Statistics](https://github.com/thomasnield/kotlin-statistics) - Idiomatic math and statistical extensions for Kotlin   
@@ -29,29 +30,21 @@ Usage:
 creating data science class
 ```kotlin
 data class Company(
-    @CsvBindByName
-    val rnd: Double? = null,
-
-    @CsvBindByName
-    val admin: Double? = null,
-
-    @CsvBindByName
-    val marketing: Double? = null,
-
-    @CsvBindByName @Category
-    val state: String? = null,
-
-    @CsvBindByName @DependentVar
-    val profit: Double? = null,
-
-    @CsvBindByName @Category
-    val tech: String? = null
+    val rnd: Double?,
+    val admin: Double?,
+    val marketing: Double?,
+    @Category
+    val state: String?,
+    @DependentVar
+    val profit: Double?,
+    @Category
+    val tech: String?
 ): ScientificData()
 ```
 
 Parsing data to data science class from resource Folder
 ```kotlin
-val data = dataClassFromCSV("/Company.csv", Company::class.java)
+    val data = dataClassFromCsv<Company>("/Company.csv").toList()
 ```
 
 using idiomatic approach

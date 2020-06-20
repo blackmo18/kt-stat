@@ -36,7 +36,7 @@ class DoubleEQ(private val categories: Map<String, Set<String>>) {
         sizex += listCategorizedData[0].dobs.size
 
         val kMat = zeros(sizey, sizex)
-        var eqDob = DoubleArray(0)
+        val eqDob = DoubleArray(0)
 
         listCategorizedData.withIndex().forEach { (count, data) ->
             var flatMat = eqDob.copyOf()

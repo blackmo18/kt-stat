@@ -1,16 +1,19 @@
 package com.vhl.ds.slr
 
-import com.vhl.ds.util.dataClassFromCSV
+import com.vhl.ds.model.Salary
+import com.vhl.ds.util.dataClassFromCsv
 import javafx.scene.chart.NumberAxis
 import javafx.scene.chart.XYChart
 import org.nield.kotlinstatistics.simpleRegression
 import tornadofx.*
 
+@ExperimentalStdlibApi
 class Chartted : App(ChartView::class)
 
+@ExperimentalStdlibApi
 class ChartView : View() {
 
-    val listemp = dataClassFromCSV("/Salary.csv", EmployeeSalary::class.java).shuffled()
+    val listemp = dataClassFromCsv<Salary>("/Salary.csv").shuffled()
     private val hSalary = listemp.maxBy{ it -> it.salary!! }
     private val hExperience = listemp.maxBy { it -> it.yearOfExp!! }
     private val dataSet = listemp.splitSet(0.2)
@@ -23,7 +26,7 @@ class ChartView : View() {
         val endY = if (pyh > hSalary.salary!!) pyh else hSalary.salary!!
         val endX = hExperience?.yearOfExp
 
-        val xAxis = NumberAxis(0.0, endX!!, endX!!*.1)
+        val xAxis = NumberAxis(0.0, endX!!, endX *.1)
         val yAxis = NumberAxis(0.0,endY, endY*.2)
 
         center = stackpane {

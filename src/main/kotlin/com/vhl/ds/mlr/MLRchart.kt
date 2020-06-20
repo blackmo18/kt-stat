@@ -1,13 +1,14 @@
 package com.vhl.ds.mlr
 
 import com.vhl.ds.model.Company
-import com.vhl.ds.util.dataClassFromCSV
+import com.vhl.ds.util.dataClassFromCsv
 import javafx.scene.chart.NumberAxis
 import tornadofx.*
 
+@ExperimentalStdlibApi
 class GraphView: View() {
 
-    val dataSet = dataClassFromCSV("/Company.csv", Company::class.java)
+    val dataSet = dataClassFromCsv<Company>("/Company.csv")
     override val root = borderpane {
 
         val xAxis  = NumberAxis(0.0,200000.0, 10000.0 )
@@ -34,4 +35,5 @@ class GraphView: View() {
     }
 }
 
+@ExperimentalStdlibApi
 class MLRchart: App(GraphView::class)

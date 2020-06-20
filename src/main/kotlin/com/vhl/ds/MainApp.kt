@@ -4,26 +4,25 @@ import com.vhl.ds.category.CategoryKeys
 import com.vhl.ds.mlr.DoubleEQ
 import com.vhl.ds.mlr.OLSML
 import com.vhl.ds.model.Company
-import com.vhl.ds.util.categorizeByVariable
-import com.vhl.ds.util.categorized
-import com.vhl.ds.util.dataClassFromCSV
-import com.vhl.ds.util.removeColumns
+import com.vhl.ds.model.Salary
+import com.vhl.ds.util.*
 import koma.create
 
-class MainApp
-
+@ExperimentalStdlibApi
 fun main() {
     //-- parsing data
-    val data = dataClassFromCSV("/Company.csv", Company::class.java)
+    val data = dataClassFromCsv<Company>("/Company.csv").toList()
 
     //-- Multi linear regression without ScientificData class and annotation
     val category1 = CategoryKeys(data)
         .addCategory(key ="state", cat = {it.state!!} )
+        .addCategory(key="tech", cat= {it.tech!!})
 
     val categorizedData = data.categorized(
         category = {
             categorizeByVariable { map ->
                 map["state"] = it.state!!
+                map["tech"] = it.tech!!
             }
         },
         numeric = {
@@ -51,6 +50,7 @@ fun main() {
     //-- removing columns for p values not in accepted values
     val matProcessed = create(xD)
     val removedCol = matProcessed.removeColumns(1,0,3)
+
 
     val olsml = OLSML(yW, xW)
     val summary = olsml.summary()

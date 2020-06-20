@@ -1,17 +1,17 @@
 package com.vhl.ds.util
 
-import com.opencsv.bean.CsvToBeanBuilder
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import com.vhl.blackmo.grass.dsl.grass
 import com.vhl.ds.category.CategorizedData
 import koma.create
 import koma.matrix.Matrix
 
-inline fun <reified T>dataClassFromCSV(path: String, type: Class<out T>): List<T> {
-    val br = T::class.java.getResourceAsStream(path).bufferedReader()
-    val csvBeans = CsvToBeanBuilder<T>(br)
-        .withType(type)
-        .withIgnoreLeadingWhiteSpace(true)
-        .build()
-    return csvBeans.parse()
+@ExperimentalStdlibApi
+inline fun <reified T>dataClassFromCsv(path: String): List<T> {
+    val start = System.currentTimeMillis()
+    val file = String::class.java.getResourceAsStream(path)
+    val contents  = csvReader().readAllWithHeader(file)
+    return   grass<T>().harvest(contents)
 }
 
 inline fun <T>List<T>.categorized(crossinline category: (T)-> HashMap<String, Any>, crossinline numeric: (T)-> DoubleArray): List<CategorizedData> {
@@ -25,17 +25,18 @@ inline fun <T>List<T>.categorized(crossinline category: (T)-> HashMap<String, An
     return catList
 }
 
+/**
+ * remove specific index of columns
+ */
 fun <T> Matrix<T>.removeColumns(vararg args :Int): Matrix<Double> {
 
     val rows = numRows()
     val colsMat = mutableListOf<DoubleArray>()
     val outArray = arrayListOf<DoubleArray>()
 
-    for (i in 0 until this.numCols()) {
-        if (!args.contains(i)) {
-            colsMat.add(this.getCol(i).getDoubleData())
-        }
-    }
+    (0 until this.numCols())
+        .filterNot { args.contains(it) }
+        .mapTo(colsMat) { this.getCol(it).getDoubleData() }
 
     for (j in 0 until rows) {
         val output = arrayListOf<Double>()
